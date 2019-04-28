@@ -65,6 +65,8 @@ var util = (function() {
           var txcAttr = null;
 
           var projMatLoc = null;
+          var correctionMatLoc = null;
+          var invViewMatLoc = null;
           var nrmMatLoc = null;
           var modelViewMatLoc = null;
 
@@ -80,42 +82,48 @@ var util = (function() {
           var materialDiffuseLoc = null;
           var materialShininessLoc = null;
 
+          var clipModeLoc = null;
+
           var mat3Buf = mat3.create();
 
           if(uniformNames !== undefined) {
-            if(uniformNames.length >= 2) {
+            if(uniformNames.length >= 3) {
               projMatLoc = gl.getUniformLocation(pId, uniformNames[0]);
-              modelViewMatLoc =  gl.getUniformLocation(pId, uniformNames[1]);
+              correctionMatLoc = gl.getUniformLocation(pId, uniformNames[1]);
+              invViewMatLoc = gl.getUniformLocation(pId, uniformNames[2]);
+              modelViewMatLoc =  gl.getUniformLocation(pId, uniformNames[3]);
 
               if(projMatLoc === null)
                 console.warn('Projection matrix location ("' + uniformNames[0] + '") could not be found!');
 
               if(modelViewMatLoc === null)
-                console.warn('World matrix location ("' + uniformNames[1] + '") could not be found!');
+                console.warn('World matrix location ("' + uniformNames[3] + '") could not be found!');
             }
             else {
               console.warn('Missing uniform Names for projection and modelview matrix');
             }
 
-            if(uniformNames.length >= 3) {
-              nrmMatLoc = gl.getUniformLocation(pId, uniformNames[2]);
+            if(uniformNames.length >= 5) {
+              nrmMatLoc = gl.getUniformLocation(pId, uniformNames[4]);
             }
 
-            if(uniformNames.length >= 8) {
-              lightPositionLoc = gl.getUniformLocation(pId, uniformNames[3]);
-              lightAmbientLoc = gl.getUniformLocation(pId, uniformNames[4]);
-              lightSpecularLoc = gl.getUniformLocation(pId, uniformNames[5]);
-              lightDiffuseLoc = gl.getUniformLocation(pId, uniformNames[6]);
-              lightAttenuationLoc = gl.getUniformLocation(pId, uniformNames[7]);
+            if(uniformNames.length >= 10) {
+              lightPositionLoc = gl.getUniformLocation(pId, uniformNames[5]);
+              lightAmbientLoc = gl.getUniformLocation(pId, uniformNames[6]);
+              lightDiffuseLoc = gl.getUniformLocation(pId, uniformNames[7]);
+              lightSpecularLoc = gl.getUniformLocation(pId, uniformNames[8]);
+              lightAttenuationLoc = gl.getUniformLocation(pId, uniformNames[9]);
             }
 
-            if(uniformNames.length >= 13) {
-              materialEmissionLoc = gl.getUniformLocation(pId, uniformNames[8]);
-              materialAmbientLoc = gl.getUniformLocation(pId, uniformNames[9]);
-              materialSpecularLoc = gl.getUniformLocation(pId, uniformNames[10]);
-              materialDiffuseLoc = gl.getUniformLocation(pId, uniformNames[11]);
-              materialShininessLoc = gl.getUniformLocation(pId, uniformNames[12]);
+            if(uniformNames.length >= 15) {
+              materialEmissionLoc = gl.getUniformLocation(pId, uniformNames[10]);
+              materialAmbientLoc = gl.getUniformLocation(pId, uniformNames[11]);
+              materialDiffuseLoc = gl.getUniformLocation(pId, uniformNames[12]);
+              materialSpecularLoc = gl.getUniformLocation(pId, uniformNames[13]);
+              materialShininessLoc = gl.getUniformLocation(pId, uniformNames[14]);
             }
+            // fixed uniform names for these special ones
+            clipModeLoc = gl.getUniformLocation(pId, 'clipMode');
           }
           else {
             console.warn('No uniforms defined!');
@@ -168,6 +176,14 @@ var util = (function() {
               if(projMatLoc !== null && projMatLoc != -1)
                 gl.uniformMatrix4fv(projMatLoc, false, m);
             },
+            bufferInvViewMatrix: function(m) {
+              if(invViewMatLoc !== null && invViewMatLoc != -1)
+                gl.uniformMatrix4fv(invViewMatLoc, false, m);
+            },
+            bufferCorrectionMatrix: function(m) {
+              if(correctionMatLoc !== null && correctionMatLoc != -1)
+                gl.uniformMatrix4fv(correctionMatLoc, false, m);
+            },
             bufferMaterial: function(material) {
               if(materialEmissionLoc !== null && materialEmissionLoc != -1)
                 gl.uniform4fv(materialEmissionLoc, material.emission());
@@ -192,6 +208,10 @@ var util = (function() {
                 gl.uniform4fv(lightDiffuseLoc, light.diffuse());
               if(lightAttenuationLoc !== null && lightAttenuationLoc != -1)
                 gl.uniform3fv(lightAttenuationLoc, light.attenuation());
+            },
+            bufferClipMode: function(value) {
+              if(clipModeLoc !== null && clipModeLoc != -1)
+                gl.uniform1i(clipModeLoc, value);
             },
             bindAttribPointers: function() {
               var stride = (3 + 4 + 3 + 2) * 4;
@@ -958,7 +978,6 @@ var camera = (function() {
 
   var mSpeed = 0.005;
   var rSpeed = PI / 75;
-
   var keys = {
     left: 'a',
     right: 'd',
@@ -971,43 +990,58 @@ var camera = (function() {
         var right = vec3.create();
         var front = vec3.create();
         var up = vec3.create();
+        var mat4Buf = mat4.create();
 
         var mPos = vec3.fromValues(0, 2, 3);
         var mPolar = 2/3 * PI;
         var mAzimut = PI;
 
+        var dirty = true;
+
         return {
           update: function(delta) {
             var mx = 0, mz = 0;
 
-            if(engine.isKeyDown(keys.front))
+            dirty=false;
+            if(engine.isKeyDown(keys.front)) {
               mz += 1;
-            if(engine.isKeyDown(keys.back))
+              dirty=true;
+            }
+            if(engine.isKeyDown(keys.back)) {
               mz -= 1;
-            if(engine.isKeyDown(keys.left))
+              dirty=true;
+            }
+            if(engine.isKeyDown(keys.left)) {
               mx -= 1;
-            if(engine.isKeyDown(keys.right))
+              dirty=true;
+            }
+            if(engine.isKeyDown(keys.right)) {
               mx += 1;
-
+              dirty=true;
+            }
             if(engine.isMouseDown()) {
               var mm = engine.mouseMovement();
               this.rotateBy(mm.dy * rSpeed, -mm.dx * rSpeed);
+              dirty=true;
             }
 
-            vec3.set(front,
-              Math.sin(mAzimut) * Math.sin(mPolar),
-              Math.cos(mPolar),
-              Math.cos(mAzimut) * Math.sin(mPolar));
-
-            vec3.cross(right, front, axis.y);
-            vec3.cross(up, right, front);
-
-            vec3.normalize(front, front);
-            vec3.normalize(right, right);
-            vec3.normalize(up, up);
+            // MH: replaced the old lookAt-related code by simple rotations
+            // this is basically front = Ry * Rx * (0,1,0) and the others
+            // accordingly. These conventions were already in the initial code
+            var s=Math.sin(mAzimut);
+            var t=Math.sin(mPolar);
+            var c=Math.cos(mAzimut);
+            var d=Math.cos(mPolar);
+            vec3.set(front, s*t, d, c*t);
+            vec3.set(up, -d*s, t, -c*d);
+            vec3.set(right, -c, 0, s);
 
             vec3.add(mPos, mPos, vec3.scale(vec3Buf, front, mz * mSpeed));
             vec3.add(mPos, mPos, vec3.scale(vec3Buf, right, mx * mSpeed));
+          },
+
+          isDirty: function() {
+            return dirty;
           },
 
           position: function(v) {
@@ -1062,6 +1096,36 @@ var camera = (function() {
               0, 0, 0, 1);
 
             mat4.translate(out, out, vec3.scale(vec3Buf, mPos, -1));
+          },
+
+          setFromMatrix: function(m) {
+            mat4.invert(mat4Buf, m);
+            vec3.set(mPos,mat4Buf[12],mat4Buf[13],mat4Buf[14]);
+            vec3.set(front,-mat4Buf[8],-mat4Buf[9],-mat4Buf[10]);
+            vec3.set(up,mat4Buf[4],mat4Buf[5],mat4Buf[6]);
+            vec3.set(right,mat4Buf[0],mat4Buf[1],mat4Buf[2]);
+            vec3.normalize(front,front);
+            vec3.normalize(right,right);
+            vec3.normalize(up,up);
+            var cosY=(front[1]);
+            if (cosY > 1.0) {
+              cosY = 1.0;
+            } else if (cosY < -1.0) {
+              cosY = -1.0;
+            }
+            var angleY=Math.acos(cosY);
+            mPolar = angleY;
+            if ( (front[0]*front[0]+front[2]*front[2]) > 0.0001) {
+              var angleX=Math.atan2(front[0],front[2]);
+              if (angleX < 0.0)
+                angleX +- PI2;
+              mAzimut=angleX;
+	    } else {
+              var angleX=Math.atan2(right[2],-right[0]);
+              if (angleX < 0.0)
+                angleX +- PI2;
+              mAzimut=angleX;
+	    }
           },
 
           getConfig: function(parent) {

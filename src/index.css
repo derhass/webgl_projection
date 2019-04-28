@@ -102,7 +102,7 @@ button:disabled {
   background-color: #323232;
   color: #A0A0A0;
   z-index: 40;
-  transition: right 0.5s;
+  /* transition: right 0.5s; MH: removed animation*/
   overflow: hidden;
 }
 

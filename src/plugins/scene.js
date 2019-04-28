@@ -18,6 +18,7 @@ engine.onReady(function() {
   const KEY_OBJECTS = 'objects';
   const KEY_MODEL_MATRIX = 'modelMatrix';
   const KEY_VISIBLE = 'visible';
+  const KEY_SHOW_AXES = 'showAxes';
   const KEY_NAME = 'name';
   const KEY_DESCRIPTION = 'description';
   const KEY_MODE = 'mode'
@@ -90,6 +91,7 @@ engine.onReady(function() {
 
         if(description.length > 0) {
           objectConf[KEY_VISIBLE] = object.visible();
+          objectConf[KEY_SHOW_AXES] = object.showAxes();
           objectConf[KEY_MODEL_MATRIX] = object.modelMatrix().toString();
           objectConf[KEY_DESCRIPTION] = description;
           objectConf[KEY_MODE] = object.mode();
@@ -116,6 +118,9 @@ engine.onReady(function() {
 
     if(config.hasOwnProperty(KEY_LIGHT)) {
       light = util.createLightSourceFromConfig(config[KEY_LIGHT]);
+      lampObject.modelMatrix(mat4.fromRotationTranslationScale(mat4Buf, quatBuf, light.position(), vec3Buf));
+      light.position
+      engine.light(light);
     }
 
     if(config.hasOwnProperty(KEY_OBJECTS)) {
@@ -138,6 +143,12 @@ engine.onReady(function() {
 
           if(objectConfig.hasOwnProperty(KEY_MODEL_MATRIX))
             object.modelMatrix(util.parseMat4(mat4.create(), objectConfig[KEY_MODEL_MATRIX]));
+
+          if(objectConfig.hasOwnProperty(KEY_VISIBLE))
+            object.visible((objectConfig[KEY_VISIBLE] == '0')?false:true);
+
+          if(objectConfig.hasOwnProperty(KEY_SHOW_AXES))
+            object.showAxes((objectConfig[KEY_SHOW_AXES] == '0')?false:true);
 
           addObject(name, object);
 
@@ -181,7 +192,15 @@ engine.onReady(function() {
     <hr/><label for="object_selection">Edit Object</label>\
     <table id="object_selection"><tr><td>Select</td>\
     <td><select size="1" id="object_selector"><option>' + OBJECT_DEFAULT + '</option></select></td></tr>\
-    <tr><td></td><td><button id="delete_object">Delete</button><button id="toogle_object">Hide</button></td></tr></table>\
+    <tr><td></td><td><button id="delete_object">Delete</button><button id="toogle_object">Hide</button></td><td><button id="toogle_object_axes">CF</button></td></tr></table>\
+    <label for="model_matrix">Model Matrix</label>\
+    <table id="model_matrix">\
+      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
+      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
+      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
+      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
+    </table>\
+    <br/>\
     <label for="material">Material</label>\
     <table id="material">\
       <tr id="emission">  <td>Emission</td>   <td><input type="text"/>  </td><td class="color_displayer"></td>  </tr>\
@@ -189,13 +208,6 @@ engine.onReady(function() {
       <tr id="diffuse">   <td>Diffuse</td>    <td><input type="text"/>  </td><td class="color_displayer"></td>  </tr>\
       <tr id="specular">  <td>Specular</td>   <td><input type="text"/>  </td><td class="color_displayer"></td>  </tr>\
       <tr id="shininess"> <td>Shininess</td>  <td><input type="text"/></td>                                     </tr>\
-    </table>\
-    <br/><label for="model_matrix">Model Matrix</label>\
-    <table id="model_matrix">\
-      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
-      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
-      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
-      <tr>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  <td><input type="text"></td>  </tr>\
     </table>\
     <input type="color" id="hidden_color_picker"/>');
 
@@ -207,7 +219,7 @@ engine.onReady(function() {
     qo.css('width', '100px');
 
     qo = plugin.html().find('#model_matrix input');
-    qo.css('width', '20px');
+    qo.css('width', '4em');
 
     qo = plugin.html().find('#color_picker');
     qo.css('width', '20px');
@@ -243,7 +255,7 @@ engine.onReady(function() {
     qo = plugin.html().find('#quadric_selector, #object_selector');
     qo.css('width', "100px")
 
-    qo = plugin.html().find('#delete_object, #toogle_object');
+    qo = plugin.html().find('#delete_object, #toogle_object, #toogle_object_axes');
     qo.css('width', '50%');
 
     plugin.html().find('label');
@@ -331,6 +343,13 @@ engine.onReady(function() {
       $(this).html('Hide');
     else
       $(this).html('Show');
+  });
+
+  plugin.html().find('#toogle_object_axes').on('click', function() {
+    if(selectedObject.showAxes(!selectedObject.showAxes()))
+      $(this).html('CF');
+    else
+      $(this).html('NoCF');
   });
 
   plugin.html().find('#quadric_selector').on('change', function() {
@@ -482,6 +501,7 @@ engine.onReady(function() {
     }
 
     plugin.html().find('#toogle_object').html(selectedObject.visible() ? 'Hide' : 'Show')
+    plugin.html().find('#toogle_object_axes').html(selectedObject.showAxes() ? 'CF' : 'NoCF')
 
     setObjectState();
   });

@@ -8,6 +8,7 @@ var engine = (function() {
   const START = true;
 
   const KEY_VISIBLE = 'visible';
+  const KEY_SHOW_AXES = 'showAxes';
   const KEY_PLUGINS = 'plugins';
   const KEY_ACTIVE_PLUGIN = 'activePlugin'
   const KEY_PAUSED = 'pause';
@@ -42,6 +43,8 @@ var engine = (function() {
   var viewMatrix = mat4.create();
   var modelMatrix = mat4.create();
   var projectionMatrix = mat4.create();
+  var correctionMatrix = mat4.create();
+  var invViewMatrix = mat4.create();
   //Interaction
   var overlay = null;
 
@@ -108,7 +111,7 @@ var engine = (function() {
     void main() {\
         eyePos = modelViewMatrix * vec4(in_pos, 1);\
         gl_Position = projectionMatrix * modelViewMatrix * vec4(in_pos, 1);\
-        pass_nrm = vec4(normalMatrix * in_nrm, 1);\
+        pass_nrm = vec4(normalMatrix * in_nrm, 0);\
         pass_col = in_col;\
         pass_txc = in_txc;\
     }';
@@ -211,6 +214,9 @@ var engine = (function() {
 
       if(defaultObjectConfig.hasOwnProperty(KEY_VISIBLE)) {
         defaultObject.visible(defaultObjectConfig[KEY_VISIBLE] == '0' ? false : true);
+      }
+      if(defaultObjectConfig.hasOwnProperty(KEY_SHOW_AXES)) {
+        defaultObject.showAxes(defaultObjectConfig[KEY_SHOW_AXES] == '0' ? false : true);
       }
 
       if(defaultObjectConfig.hasOwnProperty(KEY_MODEL_MATRIX)) {
@@ -342,7 +348,8 @@ var engine = (function() {
     var delta = now - lastLoop;
     lastLoop = now;
 
-    gl.clearColor(1, 0.5, 0, 1);
+    //gl.clearColor(0.75, 0.75, 0.75, 1);
+    gl.clearColor(0.95, 0.95, 0.95, 1);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -358,7 +365,7 @@ var engine = (function() {
     var cols = Math.ceil(Math.sqrt(activePluginCount));
     var rows = Math.ceil(activePluginCount / cols);
     var col = 0;
-    var row = 0;
+    var row = rows-1;
     var colWidth = glCanvas.width / cols;
     var rowHeight = glCanvas.height / rows;
 
@@ -374,7 +381,9 @@ var engine = (function() {
       plugin.on('bind')();
 
       mat4.identity(projectionMatrix);
+      mat4.identity(correctionMatrix);
       mat4.identity(viewMatrix);
+      mat4.identity(invViewMatrix);
       mat4.identity(modelMatrix);
       usedProgram = objectProgram;
 
@@ -389,24 +398,38 @@ var engine = (function() {
 
       if(col == cols) {
         col = 0;
-        row++;
+        row--;
       }
 
       plugin.on('callback')(delta);
 
       gl.useProgram(axisProgram.id());
       axisProgram.bufferProjectionMatrix(projectionMatrix);
+      axisProgram.bufferCorrectionMatrix(correctionMatrix);
       axisProgram.bufferModelViewMatrix(viewMatrix);
+      axisProgram.bufferInvViewMatrix(invViewMatrix);
       axisObject.bind();
       axisProgram.bindAttribPointers();
       axisObject.render();
+
+      mat4.mul(modelViewMatrix, viewMatrix, modelMatrix);
+
+      for(var okey in objects) {
+        var o = objects[okey];
+
+        if(!o.showAxes())
+          continue;
+
+        axisProgram.bufferModelViewMatrix(mat4.mul(objectModelViewMatrix, modelViewMatrix, o.modelMatrix()));
+        axisObject.render();
+      }
       axisProgram.releaseAttribPointers();
 
       gl.useProgram(usedProgram.id());
       usedProgram.bufferProjectionMatrix(projectionMatrix);
+      usedProgram.bufferCorrectionMatrix(correctionMatrix);
       usedProgram.bufferLightSource(usedLight);
-
-      mat4.mul(modelViewMatrix, viewMatrix, modelMatrix);
+      usedProgram.bufferInvViewMatrix(invViewMatrix);
 
       for(var okey in objects) {
         var o = objects[okey];
@@ -453,7 +476,7 @@ var engine = (function() {
       if(!plugin.visible())
         continue;
 
-      var text = plugin.name();
+      var text = plugin.label();
       var area = plugin.area();
 
       if(plugin === activePlugin) {
@@ -484,7 +507,7 @@ var engine = (function() {
       + lastFrameCount + ' fps, mouse at (' + mouse.nx + '/' + mouse.ny + ') ';
 
     if(activePlugin !== undefined && activePlugin !== null) {
-       statusText += activePlugin.name() + ' (' + activePlugin.id() + ') is active';
+       statusText += activePlugin.label() + ' (' + activePlugin.id() + ') is active';
     }
 
     $('#status_text').html(statusText);
@@ -497,40 +520,73 @@ var engine = (function() {
     var axis = quadric.create();
     //vertices as xyz-vectors with 3 values
     axis.vertices = [
-      -2, 0, 0,
+      0, 0, 0,
       2, 0, 0,
-      0, -2, 0,
+      0, 0, 0,
       0, 2, 0,
-      0, 0, -2,
+      0, 0, 0,
       0, 0, 2,
 
-      1.97, 0, 0.03,
-      1.97, 0, -0.03,
-      0.03, 1.97, 0,
-      -0.03, 1.97, 0,
-      0.03, 0, 1.97,
-      -0.03, 0, 1.97,
+      0, 0, 0,
+      -2, 0, 0,
+      0, 0, 0,
+      0, -2, 0,
+      0, 0, 0,
+      0, 0, -2,
+
+      1.8, 0, 0.1,
+      1.8, 0, -0.1,
+      1.8, 0.1, 0,
+      1.8,-0.1, 0,
+
+       0.1, 1.8, 0,
+      -0.1, 1.8, 0,
+       0, 1.8, 0.1,
+       0, 1.8,-0.1,
+
+       0.1, 0, 1.8,
+      -0.1, 0, 1.8,
+       0  , 0.1, 1.8,
+       0  ,-0.1, 1.8,
     ];
 
     //draw [0..5] as points -> CoordinateSystem
     axis.indices = [
       0, 1, 2, 3, 4, 5,
-      1, 6, 1, 7, 3, 8, 3, 9, 5, 10, 5, 11,
+      6, 7, 8, 9, 10, 11,
+      1, 12, 1, 13, 1, 14, 1, 15,  12,14,14,13,13,15,15,12,
+      3, 16, 3, 17, 3, 18, 3, 19,  16, 18, 18, 17, 17, 19, 19, 16,
+      5, 20, 5, 21, 5, 22, 5, 23,  20, 22, 22, 21, 21, 23, 23, 20,
     ];
 
     //colors as rgba-vector with 4 values in [0, 1)
     axis.colors = [
       1, 0, 0, 1,
       1, 0, 0, 1,
-      0, 1, 0, 1,
-      0, 1, 0, 1,
+      0, 0.5, 0, 1,
+      0, 0.5, 0, 1,
       0, 0, 1, 1,
       0, 0, 1, 1,
 
+      1, 0.7, 0.7, 1,
+      1, 0.7, 0.7, 1,
+      0.3, 0.6, 0.3, 1,
+      0.6, 0.8, 0.6, 1,
+      0.7, 0.7, 1, 1,
+      0.7, 0.7, 1, 1,
+
       1, 0, 0, 1,
       1, 0, 0, 1,
-      0, 1, 0, 1,
-      0, 1, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      0, 0.5, 0, 1,
+      0, 0.5, 0, 1,
+      0, 0.5, 0, 1,
+      0, 0.5, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
       0, 0, 1, 1,
       0, 0, 1, 1,
     ];
@@ -551,13 +607,13 @@ var engine = (function() {
     axisProgram = util.createProgram(
       util.createShader(axisVsSrc, gl.VERTEX_SHADER),
       util.createShader(axisFsSrc, gl.FRAGMENT_SHADER),
-      ['projectionMatrix', 'modelViewMatrix'],
+      ['projectionMatrix', 'correctionMatrix', 'invViewMatrix', 'modelViewMatrix'],
       ['in_pos', 'in_col']);
 
     objectProgram = util.createProgram(
       util.createShader(objectVsSrc, gl.VERTEX_SHADER),
       util.createShader(objectFsSrc, gl.FRAGMENT_SHADER),
-      ['projectionMatrix', 'modelViewMatrix', 'normalMatrix',
+      ['projectionMatrix', 'correctionMatrix', 'invViewMatrix', 'modelViewMatrix', 'normalMatrix',
         'lightPosition', 'lightAmbient', 'lightDiffuse', 'lightSpecular', 'attenuation',
         'materialEmission', 'materialAmbient', 'materialDiffuse', 'materialSpecular', 'materialShininess'],
       ['in_pos', 'in_col', 'in_nrm', 'in_txc']);
@@ -597,7 +653,7 @@ var engine = (function() {
       return;
     }
     else if(START)
-      setInterval(loop, 1000 / 45);
+      setInterval(loop, 1000 / 60);
 
     if(window.File && window.FileReader && window.FileList && window.Blob) {
       console.log('FileApi available');
@@ -657,6 +713,22 @@ var engine = (function() {
         if(cc == 'p')
           paused = !paused;
       })
+      .on('resize', function(e) {
+        var glCanvas = $('#glcanvas')[0];
+        var parentCanvas = $('#canvas_div')[0];
+
+        glCanvas.width = parentCanvas.clientWidth;
+        glCanvas.height = parentCanvas.clientHeight;
+
+        var overlayCanvas = $('#overlay')[0];
+
+        overlayCanvas.width = parentCanvas.clientWidth;
+        overlayCanvas.height = parentCanvas.clientHeight;
+
+        console.log('resized canvases')
+      });
+
+    $('#canvas_div')
       .on('mousedown', function(e) {
         mouse.down = true;
         mouse.lx = mouse.nx;
@@ -674,9 +746,12 @@ var engine = (function() {
         mouse.ny = e.pageY;
       })
       .on('dblclick', function(e) {
+        var parentOffset=$(this).offset();
+        var relX = e.pageX - parentOffset.left;
+        var relY = e.pageY - parentOffset.top;
         for(var key in plugins) {
           var plugin = plugins[key];
-          if(plugin.visible() && plugin.isInArea(e.pageX, e.pageY)) {
+          if(plugin.visible() && plugin.isInArea(relX, relY)) {
             if(activePlugin === plugin)
               activePlugin = null;
             else
@@ -686,17 +761,7 @@ var engine = (function() {
         }
       })
       .on('resize', function(e) {
-        var glCanvas = $('#glcanvas')[0];
-
-        glCanvas.width = glCanvas.clientWidth;
-        glCanvas.height = glCanvas.clientHeight;
-
-        var overlayCanvas = $('#overlay')[0];
-
-        overlayCanvas.width = overlayCanvas.clientWidth;
-        overlayCanvas.height = overlayCanvas.clientHeight;
-
-        console.log('resized canvases')
+        $(window).trigger('resize');
       });
 
     $('#create_config_link').on('click', function() {
@@ -707,6 +772,7 @@ var engine = (function() {
 
       config[KEY_DEFAULT_OBJECT] = {};
       config[KEY_DEFAULT_OBJECT][KEY_VISIBLE] = defaultObject.visible();
+      config[KEY_DEFAULT_OBJECT][KEY_SHOW_AXES] = defaultObject.showAxes();
       config[KEY_DEFAULT_OBJECT][KEY_MODEL_MATRIX] = defaultObject.modelMatrix().toString();
       defaultObject.material().getConfig(config[KEY_DEFAULT_OBJECT]);
 
@@ -722,6 +788,7 @@ var engine = (function() {
       }
 
       var configUrl = location.protocol + location.hostname + location.pathname + '?' + encodeURIComponent(writeConfig(config));
+      console.log('Config-Url: '+configUrl);
       prompt('Config-Url (' + configUrl.length + ' chars):', configUrl);
     });
 
@@ -732,10 +799,14 @@ var engine = (function() {
     var toogleMenu = function(b) {
       if(b) {
         $('#menu').css('right', '100%');
+        $('#canvas_div').css('left', '0%');
+        $('#canvas_div').trigger('resize');
         $(document.activeElement).blur();
       }
       else {
         $('#menu').css('right', '70%');
+        $('#canvas_div').css('left', '30%');
+        $('#canvas_div').trigger('resize');
       }
     };
 
@@ -759,7 +830,14 @@ var engine = (function() {
       }
     }
 
-    loadConfig(decodeURIComponent(location.search.substr(1, location.search.length - 1)));
+    var configData=location.search.substr(1, location.search.length - 1);
+    if (configData.length > 5 && configData.substring(0,5) == 'load=') {
+        var configURL=configData.substring(5);
+        console.log('Loading config from:' + configURL); 
+        configData=$.ajax({url: configURL, async:false}).responseText;
+    }
+    console.log('Config: '+configData);
+    loadConfig(decodeURIComponent(configData));
   });
 
   return {
@@ -771,8 +849,10 @@ var engine = (function() {
     },
 
     viewMatrix: function(m) {
-      if(m !== undefined)
+      if(m !== undefined) {
         mat4.copy(viewMatrix, m);
+        mat4.invert(invViewMatrix, viewMatrix);
+      }
 
       return viewMatrix;
     },
@@ -789,6 +869,13 @@ var engine = (function() {
         mat4.copy(projectionMatrix, m);
 
       return projectionMatrix;
+    },
+
+    correctionMatrix: function(m) {
+      if(m !== undefined)
+        mat4.copy(correctionMatrix, m);
+
+      return correctionMatrix;
     },
 
     program: function(p) {
@@ -835,11 +922,13 @@ var engine = (function() {
       return activePlugin;
     },
 
-    registerPlugin: function(name) {
+    registerPlugin: function(name, label) {
       var id = 'p' + getNextId();
 
       if(name === undefined || name === '')
         name = 'Plugin ' + id;
+      if(label === undefined || label === '')
+        label = name
 
       var menuItem = '<div id="'
         + id
@@ -848,7 +937,7 @@ var engine = (function() {
         + '"></input><div class="item_header"><label class="item_label" for="radio'
         + id
         + '">'
-        + name
+        + label
         + '</label><button class="item_hide_button"</button>\
         <button class="item_close_button">X</button>\
         </div><div class="item_body"></div></div>';
@@ -866,6 +955,7 @@ var engine = (function() {
       var plugin = (function(){
         var mId = id;
         var mName = name;
+        var mLabel = label;
         var mVisible = true;
         var mCallback = null;
         var mOn = {};
@@ -906,6 +996,12 @@ var engine = (function() {
           name: function() {
             return mName;
           },
+          label: function(str) {
+            if (str !== undefined && str !== '') {
+              mLabel=str;
+	    }
+            return mLabel;
+          },
           area: function(x0, y0, x1, y1) {
             if(x0 !== undefined && y0 !== undefined && x1 !== undefined && y1 !== undefined) {
               mArea.x0 = x0;
@@ -925,6 +1021,13 @@ var engine = (function() {
           },
           viewHeight: function() {
             return mArea.y1 - mArea.y0;
+          },
+          viewAspect: function() {
+            var w=mArea.x1 - mArea.x0;
+            var h=mArea.y1 - mArea.y0;
+            if (w < 1 || h < 1)
+              return 1.0;
+            return w/h;
           },
         };
       })();
@@ -1040,6 +1143,7 @@ var engine = (function() {
       objects[id] = (function() {
         var mModelMatrix = mat4.create();
         var mVisible = true;
+        var mShowAxes = false;
         var mId = id;
         var mMaterial = util.createMaterial(
           vec4.fromValues(0.1, 0.1, 0.1, 1),
@@ -1091,6 +1195,13 @@ var engine = (function() {
 							mVisible = b;
 
             return mVisible;
+          },
+
+          showAxes: function(b) {
+            if(b !== undefined)
+              mShowAxes = b;
+
+            return mShowAxes;
           },
 
           description: function() {
