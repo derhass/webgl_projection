@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+
+<html lang="de">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Cg1-Website - Hilfe</title>
+    <link rel="stylesheet" href="help.css"/>
+    <!-- <script src="scripts/jquery-3.2.0.min.js"></script>
+    <script src="validation/link_validator.js"></script> -->
+  </head>
+  <body>
+    <h1 id="page_start">Hilfeseite zur CG1-Website</h1>
+      <h2>Inhalt</h2>
+        <ul>
+          <li><a href="#doc">Anleitung</a>
+            <ul>
+              <li><a href="#doc_intro">Einf&uuml;hrung</a></li>
+              <li><a href="#doc_ui">Oberfl&auml;che</a></li>
+              <li><a href="#doc_predefinedPlugins">Vordefinierte Plugins</a>
+                <ul>
+                  <li><a href="#doc_predefinedPlugins_perspective">Perspektivische Verzerrung</a></li>
+                  <li><a href="#doc_predefinedPlugins_scene">Szenenverwaltung</a></li>
+                </ul>
+              </li>
+              <li><a href="#doc_customPlugins">Eigene Plugins</a>
+                <ul>
+                  <li><a href="#doc_customPlugins_lang">Sprache</a></li>
+                  <li><a href="#doc_customPlugins_libs">Bibliotheken</a></li>
+                  <li><a href="#doc_customPlugins_struct">Struktur</a></li>
+                  <li><a href="#doc_customPlugins_callbacks">Callbacks</a></li>
+                  <li><a href="#doc_customPlugins_style">Programmierstil</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#ref">Funktionsreferenz</a>
+            <ul>
+              <li><a href="#ref_engine">engine</a></li>
+              <li><a href="#ref_util">util</a></li>
+              <li><a href="#ref_camera">Camera</a></li>
+              <li><a href="#ref_quadrics">quadrics</a></li>
+              <li><a href="#ref_mouse_movement">MouseMovement</a></li>
+              <li><a href="#ref_mouse_pos">MousePos</a></li>
+              <li><a href="#ref_quadric">Quadric</a></li>
+              <li><a href="#ref_scene_object">SceneObject</a></li>
+              <li><a href="#ref_cameraObj">Camera (Instance)</a></li>
+              <li><a href="#ref_light_source">LightSource</a></li>
+              <li><a href="#ref_program">Program</a></li>
+              <li><a href="#ref_plugin">Plugin</a></li>
+              <li><a href="#ref_keys">Keys</a></li>
+              <li><a href="#ref_area">Area</a></li>
+              <li><a href="#ref_events">Events</a></li>
+            </ul>
+          </li>
+          <li><a href="#about">&Uuml;ber</a></li>
+        </ul>
+        <a id="up_button" href="#page_start">Nach oben</a>
+    <h1 id="doc">Anleitung</h1>
+      <h2 id="doc_intro">Einf&uuml;hrung</h2>
+        <p>Die Website stellt ein Framework und einige Plugins zur Verf&uuml;gung,
+          mit denen die erlernten Grundlagen der Computergrafik praktisch
+          ausprobiert werden k&ouml;nnen. Dazu k&ouml;nnen bei Bedarf auch leicht
+          eigene Plugins in Javascript entwickelt werden.
+        </p>
+      <h2 id="doc_ui">Oberfl&auml;che</h2>
+        <p>Zun&auml;chst ist nur eine gro&szlig;e, freie Fl&auml;che zu sehen,
+          da noch keine Plugins aktiviert sind. Durch scrollen nach unten oder
+          einen Klick auf den Button unten links &ouml;ffnet sich das Men&uuml;.
+          Im ge&ouml;ffneten Men&uuml; sind folgende interessante Punkte zu sehen:
+        </p>
+        <div class="img_div">
+            <img src="../res/interface_menu_base.png" alt="Interface mit offenem Men&uuml;"/>
+        </div>
+        <table>
+            <tr><th>Nr.</th><th>Beschreibung</th></tr>
+            <tr><td>1</td><td>&Ouml;ffnet oder schlie&szlig;t das Men&uuml;.</td></tr>
+            <tr><td>2</td><td>&Ouml;ffnet einen Dialog, um ein Plugin aus dem Dateisystem zu laden.</td></tr>
+            <tr><td>3</td><td>Statuszeile, gibt allgemeine Informationen &uuml;ber den Zustand der Anwendung.</td></tr>
+            <tr><td>4</td><td>Erstellt einen <a href="#doc_config">Konfigurationslink</a></td></tr>
+            <tr><td>5</td><td>ndert die Bewegungsgeschwindigkeit der Kamera</td></tr>
+            <tr><td>6</td><td>Eintrag eines Plugins, mit Namen und Buttons zum Ein- und Aubslenden bzw. Entfernen.
+              Beim Klick auf den Namen des Plugins &ouml;ffnet sich das Men&uuml; des Plugins, falls eines vorhanden ist.</td></tr>
+            <tr><td>7</td><td>Pluginsichtbarkeit umschalten oder Plugin entfernen. Durch einen Klick auf das Augensymbol wird ein Plugin ein- oder ausgeblendet.
+                Durch einen Klick auf das Kreuz wird das Plugin entfernt. Vordefinierte Plugins k&ouml;nnen jedoch nicht entfernt werden, weshalb die entsprechenden
+                Schaltfl&auml;chen hier ausgegraut sind.</td></tr>
+        </table>
+        <p>Nach einem Klick auf den Namen des Plugins &ouml;ffnet sich ein Men&uuml;. In diesem Men&uuml; l&auml;sst sich zum Beispiel
+          die Szene konfigurieren. Andere Plugins haben andere oder gar keine Men&uuml;s.</p>
+        <div class="img_div">
+            <img src="../res/opened_settings.png" alt="Ge&ouml;ffnetes Men&uuml; eines Plugins" width="564px" heigth="730px"/>
+        </div>
+      <h2 id="doc_controls">Steuerung</h2>
+        <ul>
+          <li>Falls das gew&uuml;nschte Plugin nicht sichtbar ist, das Men&uuml; &ouml;ffnen und rechts
+            neben dem Namen des Plugins auf das Augensymbol klicken. Statt dem
+            durchgestrichenen Auge sollte ein offenes Augen zu sehen sein. Anschlie&szlig;end das
+            Men&uuml; wieder schlie&szlig;en.</li>
+          <li>Das Plugin durch Doppelklick in den entsprechenden Bereich fokusieren. Daraufhin sollte
+            der Bereich gr&uuml;n umrahmt werden.</li>
+          <li>Mittels W, A, S und D l&auml;sst sich die Kamera entsprechend der Blickrichtung bewegen.</li>
+          <li>Durch Ziehen des Mauszeigers bei gedr&uuml;ckter linker Maustaste l&auml;sst sich die
+            Ansicht drehen.</li>
+        </ul>
+      <h2 id="doc_predefinedPlugins">Vordefinierte Plugins</h2>
+        <h3 id="doc_predefinedPlugins_perspective">Plugingruppe: Perspektivische Verzerrung</h3>
+        	<p>Diese Gruppe besteht aus 4 Plugins, die die Schritte der perspektivischen Transformation und das Endergebnis zeigen.
+            Die 4 Plugins dieser Gruppe zeigen:</p>
+          <ul>
+            <li>Worldspace</li>
+            <li>Viewspace</li>
+            <li>Normalized Device Coordinates</li>
+            <li>Finale Ansicht</li>
+          </ul>
+          <p>Man kann sich dabei frei durch jede Szene bewegen. Jedes Plugin (außer das der finalen Ansicht)
+            zeigt einen schwarzen Rahmen, der das Viewfrustum darstellt und eine Pyramide, die die Kamera darstellt.
+            Wenn man das Plugin f&uuml;r die finale Ansicht ausw&auml;hlt und sich darin bewegt, bewegt sich die
+            Kamera-Pyramide und im Worldspace auch das Kameraobjekt dementsprechend mit. Weiterhin l&auml;sst sich in den Einstellungen
+            des Plugins f&uuml;r die finale Ansicht auch ein einfaches Viewfrustum definieren, oder eine eigene
+            Projektionsmatrix eingeben. Diese Matrix beeinflusst die Darstellung des Viewfrustums im
+            Camera- und Worldspace, bzw. die Transformation der Szene im NDC.</p>
+        <h3 id="doc_predefinedPlugins_scene">Plugin f&uuml;r Szenenverwaltung</h3>
+          <p>Das Plugin zeigt lediglich die unver&auml;nderte Szene an. In den Einstellungen des Plugins k&ouml;nnen jedoch,
+            im ersten Abschnitt, die Position der Lichtquelle und deren Farbeigenschaften bearbeitet werden.
+            Im zweiten Abschnitt k&ouml;nnen neue Objekte aus einer Liste ausw&auml;hlbarer Grundformen
+            (den Quadrics) erstellt werden. Die Farbe der Quadric kann dabei eingestellt werden,
+            hat beim normalen Shader keien Effekt.
+            Im dritten Abschnitt l&auml;sst sich ein erstelltes Objekt ausw&auml;hlen und bearbeiten,
+            bzw. ausblenden oder entfernen. Einstellbar sind die Materialeigenschaften und die
+            Transformationsmatrix des Objekts.
+      <h2 id="doc_customPlugins">Eigene Plugins</h2>
+        <p>Es stehen einige Plugins, f&uuml;r die am h&auml;ufigsten ben&ouml;tigten Funktionen,
+          zur Verf&uuml;gung. Sollten diese nicht ausreichen, k&ouml;nnen eigene Plugins
+          enwickelt und geladen werden.</p>
+        <h3 id="doc_customPlugins_lang">Sprache</h3>
+        <p>Der Hauptteil von Plugins muss in JavaScript geschrieben sein, es k&ouml;nnen
+          aber auch Anteile in html enthalten sein. Plugins k&ouml;nnen ihrerseits
+          wieder Code aufrufen, der in beliebigen Sprachen geschrieben wurde.</p>
+        <h3 id="doc_customPlugins_libs">Bibliotheken</h3>
+          Zum entwicklen eigener Plugins k&ouml;nnen einige vorhandene Bibliotheken genutzt werden.
+          <h4>JQuery</h4>
+            <p>Die JQuery-Biliothek wird standardm&auml;&szlig;ig geladen und steht zur Verf&uuml;gung.
+              Falls es bei Benutzung der Bibliothek zu Problemen kommen sollte ist
+              es empfehlenswert den Kompatibilit&auml;tsmodus von JQuery zu benutzen.
+              Weitere Informationen zu JQuery befinden sich auf der <a href="http://jquery.com/" target="_blank">Homepage</a>.</p>
+          <h4>gl-matrix</h4>
+            <p>Die Bibliothek enth&auml;lt Funktionen f&uuml;r grundlegende Rechenoperationen
+              mit 2-, 3- und 4-dimensionalen Vektoren, sowie f&uuml;r 2x2-, 3x3- und 4x4-Matrizen
+              und Quaternionen. Es werden alle &uuml;blichen
+              Matrixoperationen, wie Multiplikation, Addition, Subtraktion, skalare
+              Multiplikation, Multiplikation mit Vektoren, Invertierung und Transponierung
+              unterst&uuml;tzt. Weiterhin gibt es Funktionen zum erstellen von Dreh-,
+              Skalierungs-, Verschiebungs- und Frustumsmatrizen und zum Berechnen der
+              Normalentransformationsmatrix. F&uuml;r Vektoren stehen ebenfalls die Grundoperationen,
+              Punkt- und Kreuzprodukt zur Ver&uuml;fgung.
+              Weitere Informationen befinden sich auf der <a href="http://glmatrix.net/" target="_blank">Homepage</a>.</p>
+          <h4>util</h4>
+            <p>Enth&auml;lt Funktionen zur Erzeugung von GLSL-Shadern und -Programmen und einige andere Hilfsfunktionen.</p>
+          <h4>camera</h4>
+            <p>Enth&auml;lt Funktionen zum Erzeugen eines Kameraobjekts, dass die Bewegung einer Kamera durch die Szene vereinfacht.</p>
+          <h4>quadric</h4>
+            <p>Enth&auml;lt Funktionen zum Erstellen von Quadrics.</p>
+        <h3 id="doc_customPlugins_struct">Struktur</h3>
+          <p>Jedes Plugin wird wie normales Javascript ausgef&uuml;hrt. Das hei&szlig;t, dass
+            jede Anweisung im Plugin der Reihe nach ausgef&uuml;hrt wird, sobald das Plugin
+            geladen wurde. Der wichtigste Aufruf, der erfolgen muss, damit das Plugin
+            sinnvoll mit der Engine arbeiten kann, ist der Aufruf engine.registerPlugin(name). Mit diesem
+            Aufruf registriert sich ein Plugin bei der Engine und erzeugt ein Pluginobjekt.
+            Der einzige Parameter ist dabei der Name des Plugins. Falls dieser Name schon existiert,
+            wird er durch eine fortlaufende Numerierung erg&auml;nzt. F&uuml;r das erhaltene Pluginobjekt
+            k&ouml;nnen nun Callbacks definiert werden.</p>
+        <h3 id="doc_customPlugins_callbacks">Callbacks</h3>
+          Callbacks sind Funktionen, die beim Eintreten eines Ereignisses ausgef&uuml;hrt werden.
+          Sie lassen sich &uuml;ber die Funktion pluginobject.on(name, function) eines Pluginobjektes
+          definieren. Der Parameter name stellt dabei den Namen des Callbacks dar und
+          function ist eine Funktion, die beim Aufruf des Callbacks durch die Engine ausgef&uuml;hrt werden soll.
+          Diese Funktion kann normalerweise einfach als Lambdafunktion definiert werden.
+          Siehe dazu <a href="#ref_events">Events</a>
+        <h3 id="doc_customPlugins_style">Programmierstil</h3>
+          <h4>Daten verstecken</h4>
+            <p>Beim Entwickeln von Plugins m&uuml;ssen einige Dinge beachtet werden, um eine
+            Konflikt- und fehlerfreie Ausf&uuml;hrung zu gew&auml;hrleisten.
+            Javascript hat kein Konzept von Namespaces oder Klassen wie z.B. C++.
+            Deshalb kann es leicht zu Konflikten kommen, falls zwei Plugins
+            Funktionen mit dem gleichen Namen definieren. Die beste M&ouml;glichkeit
+            Funktionen (und Daten) vor anderen Plugins zu verstecken sind Closures.
+            Es sei hier lediglich folgende Kurzanleitung zur Kapselung des Plugins
+            gegeben, weitere Informationen lassen sich <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Closures">hier</a> finden.
+            Die empfohlene Form ist dabei, das Plugin wie gewohnt zu schreiben
+            und es dann in eine Closure einzuschlie&szlig;en, die das Argument der
+            Funktion <a href="#ref_engine_onReady">engine.onReady(f)</a> darstellt.
+            Zum Beispiel so:<br/>
+            engine.onReady(function() {<br/>
+              var foo = "...";<br/>
+              var calc = function() {...};<br/>
+              <br/>
+              var plugin = engine.registerPlugin('My Plugin');<br/>
+              plugin.setHtml(myhtml...));<br/>
+              plugin.on('callback', function(delta) {<br/>
+                if(foo === calc()) ...<br/>
+              });<br/>
+            });<br/>
+            Durch das Einschlie&szlig;en des Plugins in eine anonyme Funktion
+            sind alle Daten und Funktionen des Plugins nach au&szlig;en unsichtbar.</p>
+          <h4>Daten zug&auml;nglich machen</h4>
+            <p>Wenn man eine mehrere miteinander kommunizierende Plugins schreiben m&ouml;chte, m&uuml;ssen diese
+              Daten austauschen. Dazu wird empfohlen, am Anfang des Scripts ein Objekt mit einem
+              einzigartigen Namen zu definieren. Diesem Objekt werden weiter unten im Script Funktionen hinzugef&uuml;gt,
+              die "private" Variablen nach au&szlig;en sichtbar machen. Zum Beispiel so:<br/>
+              var myPlugin = {} //Objekt definieren<br/>
+              engine.onReady(function() {<br/>
+                var foo = ...<br/>
+                myPlugin.getFoo = function() {<br/>
+                  return foo;<br/>
+                };<br/>
+                ...<br/>
+              });<br/>
+              Die Variable foo ist nach au&szlig;en nicht sichtbar, sondern nur innerhalb der Closure.
+              Das Objekt "myPlugin" ist jedoch nach au&szlig;en sichtbar und hat eine Funktion
+              "getFoo()", die die Variable foo zur&uuml;ckgibt.</p>
+          <h4>Einstellungen</h4>
+            <p>Jedes Plugin kann einen Block im Men&uuml; anlegen, der als Einstellungsseite
+              gedacht ist, aber auch anderweitg nutzbar ist. Dazu muss die Funktion <a href="#ref_plugin_html">plugin.html(html)</a>
+              aufgerufen werden. Das Argument "html" ist der html-Code als String, der beim
+              Klicken auf den Eintrag des jeweiligen Plugins angezeigt werden soll.
+              Falls html-Code &uuml;bergeben wurde, wird dieser in einen Div-Block verpackt.
+              Es wird immer ein JQuery-Objekt
+              zur&uuml;ckgegeben, das diesen Div-Block referenziert. &Uuml;ber dieses
+              JQuery-Objekt sollte auch auf das Dom des Plugins zugegriffen werden:<br/>
+              plugin.html().find('#myTable')<br/>
+              Der Zugriff &uuml;ber die Wurzel des Doms der gesamten Website z.B. durch<br/>
+              $('#myTable')<br/>
+              kann dazu f&uuml;hren, dass ungewollt andere Objekte selektiert werden, da
+              nicht ausgeschlossen werden kann, dass ein anderes Plugin auch ein Dom-Element mit
+              der id "myTable" in seinen Einstellungen hat.</p>
+      <h2 id="doc_config">Konfigurationen</h2>
+        <p>Konfigurationsobjekte sind normale Objekte, die beliebige Eigenschaften haben k&ouml;nnen und
+          wie eine Hashmap genutzt werden. Eine Konfiguration beschreibt den Zustand der Plugins und der Engine.
+          Konfigurationen k&ouml;nnen &uuml;ber einen Button am unteren Rand des Men&uuml;s erzeugt werden.
+          Es wird eine URI erstellt, die auch als Link in eine Website eingebunden werden kann.
+          Das Laden einer Konfiguration erfolgt, indem die generierte URI aufgerufen wird, zum Beispiel
+          wenn sie als Link in eine Website eingebettet war und darauf geklickt wurde.
+          Beim Speichern wird ein Konfigurationsobjekt in einen String umgewandelt, der wiederum als URI
+          codiert wird. Dazu werden alle Schl&uuml;ssel-Wert-Paare (bzw. Eigenschaftsname-Eigenschaftswert-Paare)
+          des zu speichernden Konfigurationsobjekts durchlaufen und wie folgt in einen String verwandelt:</p>
+          <table>
+            <tr><th>Format</th><th>Bedingung</th></tr>
+            <tr><td>Schl&uuml;ssel=Wert;</td><td>Wert ist vom Typ String, Number oder Boolean</td></tr>
+            <tr><td>Schl&uuml;ssel={Wert};</td><td>Wert ist vom Typ Object und wird seinerseits wiede als
+              Konfigurationsobjekt interpretiert.</td></tr>
+          </table>
+          <p>Beim Laden werden immer nur String-Werte geladen und beim Auslesen m&uuml;ssen Zahlen,
+          booleanische Werte und Kindobjekte manuell geparsed werden. Dies geschieht &uuml;ber Events.</p>
+    <h1 id="ref">Referenz</h1>
+        <p>Im folgenden die Referenz aller Objekte und ihrer Eigenschaften und Funktionen, die
+        	in der Anwendung existieren (ohne Plugins). Dabei wird jeweils eine kurze
+        	Beschreibung der Funktion angegeben und in einer Tabelle die Namen, Typen und Beschreibungen
+        	aller Parameter.</p>
+  			<p>Die Datentypen vec2, vec3, vec4, mat3 und mat4 sind in gl-matrix definiert. Beides wird intern
+  				lediglich durch einfache Arrays dargestellt, was man ausnutzen kann um Vektoren nicht
+  				immmer umwandeln zu m&uuml;ssen. Einer Funktion die z.B. einen vec3 als Paramter
+  				ben&ouml;tigt kann ohne weiteres auch ein vec4 &uuml;bergeben werden. Das 4. Element
+  				des Vektors wird dabei einfach nicht beachtet und man muss die Daten des Vektors nicht explizit
+  				in einen vec3 schreiben.</p>
+        <h2 id="ref_engine">engine</h2>
+          <h3 id="ref_engine_onReady">onReady(f)</h3>
+            <p>F&uuml;gt eine Funktion hinzu, die ausgef&uuml;hrt wird, sobald die Engine
+              bereit ist. Ist dies beim Aufruf der Funktion der Fall wird f sofort ausgef&uuml;hrt.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>f</td><td>function</td><td>Funktion die aufgerufen werden soll, sobald die Engine bereit ist.</td></tr>
+              <tr><td>return</td><td></td><td>-</td></tr>
+            </table>
+            <h3>viewMatrix(m)</h3>
+            <p>Setzt die Viewmatrix auf m falls m angegeben ist und gibt danach die aktuelle Viewmatrix zur&uuml;ck.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>[m]</td><td>mat4</td><td>Neue View Matrix</td></tr>
+              <tr><td>return</td><td>mat4</td><td>Die aktuelle Viewmatrix</td></tr>
+            </table>
+          <h3>modelMatrix(m)</h3>
+            <p>Setzt die Modelmatrix auf m falls m angegeben ist und gibt danach die aktuelle Modelmatrix zur&uuml;ck.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>[m]</td><td>mat4</td><td>Neue Modelmatrix f&uuml;r die gesamte Szene</td></tr>
+              <tr><td>return</td><td>mat4</td><td>Die aktuelle Modelmatrix</td></tr>
+            </table>
+          <h3>projectionMatrix(m)</h3>
+            <p>Setzt die Projektionsmatrix auf m falls m angegeben ist und gibt danach die aktuelle Projektionsmatrix zur&uuml;ck.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>[m]</td><td>mat4</td><td>Die neue Projektionsmatrix</td></tr>
+              <tr><td>return</td><td>mat4</td><td>Die aktuelle Projektionsmatrix</td></tr>
+            </table>
+          <h3>program(p)</h3>
+            <p>Legt das zu benutzende Program fest. p ist dabei keine Programm-Id sondern ein
+              Programm-Objekt, wie es uti.createProgram(...) zur&uuml;ckgibt. Gibt danach
+              das aktuelle Shaderprogramm zur&uuml;ck.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>[p]</td><td><a href="#ref_program">Program</a></td><td>Das neue Glsl-Programm</td></tr>
+              <tr><td>return</td><td><a href="#ref_program">Program</a></td><td>Das aktuelle Glsl-Programm</td></tr>
+            </table>
+          <h3>light(l)</h3>
+            <p>Legt das Licht fest und gibt danch das aktuelle Licht zur&uuml;k</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>[l]</td><td><a href="#ref_light_source">LightSource</a></td><td>Die neue Lichtquelle</td></tr>
+              <tr><td>return</td><td><a href="#ref_light_source">LightSource</a></td><td>Die aktuelle Lichtquelle</td></tr>
+            </table>
+          <h3>defaultObject()</h3>
+            <p>Holt den W&uuml;rfel, der standardm&auml;&szlig;ig angezeigt wird.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_scene_object">SceneObject</a></td><td>Das Standard-Objekt</td></tr>
+            </table>
+          <h3>mouseMovement()</h3>
+            <p>Holt ein Objekt mit den Eigenschaften dx und dy, das angibt, wie viele Pixel sich
+              die Maus seit dem letzten Frame bewegt hat.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_mouse_movement">MouseMovement</a></td><td>Die Bewegung der Maus in x- bzw. y-Richtung</td></tr>
+            </table>
+          <h3>mousePos()</h3>
+            <p>Gibt ein Objekt mit den Eigenschaften x und y zur&uuml; das die Position des Cursors
+              im Fenster angibt.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_mouse_pos">MousePos</a></td><td>Die Position de Mauszeigers</td></tr>
+            </table>
+          <h3>isKeyDown(key)</h3>
+            <p>Gibt true zur&uuml;ck wenn im letzten Frame die Taste key gedr&uuml;ckt war.
+              Dabei kann key nur Werte aus [0-9] und [a-z] bzw. [A-Z] annehmen.
+              isKeyDown('X') liefert immer das selbe Ergebnis wie isKeyDown('x').</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>key</td><td>String</td><td>Die zu testende Taste (sollte nur 1 Zeichen enthalten)</td></tr>
+              <tr><td>return</td><td>Boolean</td><td>true, wenn die Taste im letzten Frame gedr&uuml;ckt war, sonst false</td></tr>
+            </table>
+          <h3>isMouseDown()</h3>
+            <p>Gibt zur&uuml;ck ob die Maus im letzten Frame gedr&uuml;ckt war oder nicht.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td>Boolean</td><td>True, wenn die Maus im letzten Frame gedr&uuml;ckt war, sonst false</td></tr>
+            </table>
+          <h3>activePlugin()</h3>
+            <p>Gibt das aktuell fokusierte Plugin zur&uuml;ck.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_plugin">Plugin</a></td><td>Fokusiertes Plugin oder null, falls kein Plugin fokusiert ist.</td></tr>
+            </table>
+          <h3>registerPlugin(name)</h3>
+            <p>Registriert ein Plugin bei der Engine und erzeugt ein Plugin-objekt zur Interaktion.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>name</td><td>String</td><td>Der Name des Plugins</td></tr>
+              <tr><td>return</td><td><a href="#ref_plugin">Plugin</a></td><td>Das erzeugte Plugin.</td></tr>
+            </table>
+          <h3>removePlugin(id)</h3>
+            <p>Entfernt das Plugin, das durch id identifiziert wird.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>id</td><td>String</td><td>Die Id des Plugins</td></tr>
+              <tr><td>return</td><td>-</td><td>-</td></tr>
+            </table>
+          <h3>tooglePluginVisibility(id)</h3>
+            <p>&Auml;ndert die Sichtbarkeit des Plugins, das durch id identifiziert wird.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>id</td><td>String</td><td>Die Id des Plugins</td></tr>
+              <tr><td>return</td><td>-</td><td>-</td></tr>
+            </table>
+          <h3>addObject(q, mode)</h3>
+            <p>F&uuml;gt einObjekt zur Szene hinzu.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>q</td><td><a href="#ref_quadric">Quadric</a></td><td>Die Quadric mit den Vektordaten des Objekts</td></tr>
+              <tr><td>mode</td><td>Number</td><td>Der Zeichenmodus, gl.TRIANGLES oder gl.LINES</td></tr>
+              <tr><td>return</td><td><a href="#ref_scene_object">SceneObject</a></td><td>Das erzeugte Objekt</td></tr>
+            </table>
+          <h3>getObject(id)</h3>
+            <p>Gibt das Objekt zur&uuml;ck, das durch id identifiziert wird, oder null, falls id ung&uuml;ltig ist.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>id</td><td>String</td><td>Die Id des Objekts</td></tr>
+              <tr><td>return</td><td><a href="#ref_scene_object">SceneObject</a></td><td>Das Szenenobjekt, oder null</td></tr>
+            </table>
+          <h3>removeObject(id)</h3>
+            <p>Entfernt das Objekt, das durch id identifiziert wird.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>id</td><td>String</td><td>Die Id des Objekts</td></tr>
+              <tr><td>return</td><td>-</td><td>-</td></tr>
+            </table>
+        <h2 id="ref_util">util</h2>
+          <h3>createShader(src, type)</h3>
+            <p>Erzeugt einen GLSL-Shader vom gegebenen Typ aus dem gegebenen Quelltext.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>src</td><td>String</td><td>Der Sourcecode des Shaders</td></tr>
+              <tr><td>type</td><td>Number</td><td>Typ des Shaders, gl.VERTEX_SHADER oder gl.FRAGMENT_SHADER</td></tr>
+              <tr><td>return</td><td>Number</td><td>Die Id des erzeugten Shaders</td></tr>
+            </table>
+          <h3>createProgram(vs, fs, uniformNames, attribNames</h3>
+            <p>Erzeugt ein Program aus einem Vertex- und einem Fragmentshader
+              Das Program wird gelinkt und die Namen f&uuml;r Unifroms und Attribute werden automatisch
+              gebunden.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>vs</td><td>Number</td><td>Die Id des Vertexshaders</td></tr>
+              <tr><td>fs</td><td>Number</td><td>Die Id des Fragmentshaders</td></tr>
+              <tr><td>uniformNames</td><td>String[]</td><td>Die Namen der unterst&uuml;tzten uniforms in folgender Reihenfolge:
+                <ol>
+                  <li>Projektionsmatrix (mat4)</li>
+                  <li>Modelviewmatrix (mat4)</li>
+                  <li>[Normalenmatrix] (mat3)</li>
+                  <li>[Lichtposition] (vec3)</li>
+                  <li>[Lichtfarbe Ambient] (vec4)</li>
+                  <li>[Lichtfarbe Specular] (vec4)</li>
+                  <li>[Lichtfarbe Diffuse] (vec4)</li>
+                  <li>[Attenuation] (vec3)</li>
+                  <li>[Materialfarbe Emission] (vec4)</li>
+                  <li>[Materialfarbe Ambient] (vec4)</li>
+                  <li>[Materialfarbe Specular] (vec4)</li>
+                  <li>[Materialfarbe Diffuse] (vec4)</li>
+                  <li>[Materialglanz] (float)</li>
+                </ol>
+              Namen in eckigen Klammern sind optional. Hinter den Namen steht der erwartete Datentyp.
+              Sollten Werte zwischendrin ausgelassen werden sind diese durch einen leeren String ("") zu ersetzen.</td></tr>
+              <tr><td>attribNames</td><td>String[]</td><td>Die Namen der Vektorattribute in folgender Reihenfolge:
+                <ul>
+                  <li>Position (vec4)</li>
+                  <li>Farbe (vec4)</li>
+                  <li>Normale (vec3)</li>
+                  <li>Texturkoordinaten (vec2)</li>
+                </ul>
+                Namen in eckigen Klammern sind optional. Hinter den Namen steht der erwartete Datentyp.
+                Falls Attribute in der Mitte weggelassen werden sollten, m&uuml;ssen diese durch einen leeren String ersetzt werden.</td></tr>
+              <tr><td>return</td><td><a href="#ref_program">Program</a></td><td>Das erzeugte Program</td></tr>
+            </table>
+          <h3>createMaterial(emis, ambi, diff, spec, shine)</h3>
+            <p>Erstellt ein neues Material aus den gegebenen Werten.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>ambi</td><td>vec4</td><td>Die Farbe der Lichtemission</td></tr>
+              <tr><td>ambi</td><td>vec4</td><td>Die Farbe des Ambientlichts</td></tr>
+              <tr><td>diff</td><td>vec4</td><td>Die Farbe des diffusen Lichts</td></tr>
+              <tr><td>spec</td><td>vec4</td><td>Die Farbe des Spekul&auml;ren Lichts</td></tr>
+              <tr><td>shine</td><td>Number</td><td>Der Glanzwert</td></tr>
+              <tr><td>return</td><td><a href="#ref_material">Material</a></td><td>Das erzeugte Material</td></tr>
+            </table>
+          <h3>createMaterialFromConfig(config)</h3>
+            <p>Erstellt eine Materialdefinition aus der gegebenen Konfiguration.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>config</td><td><a href="#doc_config">Configuration</a></td><td>Das Konfigurationsobjekt, dass die auszulesenden Eigenschaften enth&auml;lt<td></tr>
+              <tr><td>return</td><td><a href="#ref_material">Material</a></td><td>Das erzeugte Material</td></tr>
+            </table>
+          <h3>createLightSource(pos, ambi, diff, spec)</h3>
+            <p>Erzeugt eine Lichtquelle.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>pos</td><td>vec3</td><td>Dis Position der Lichtquelle</td></tr>
+              <tr><td>ambi</td><td>vec4</td><td>Die Farbe des Ambientlichts</td></tr>
+              <tr><td>diff</td><td>vec4</td><td>Die Farbe des diffusen Lichts</td></tr>
+              <tr><td>spec</td><td>vec4</td><td>Die Farbe des Spekul&auml;ren Lichts</td></tr>
+              <tr><td>return</td><td><a href="#ref_light_source">LightSource</a></td><td>Die erzeugte Lichtquelle</td></tr>
+            </table>
+          <h3>createLightSourceFromConfig(config)</h3>
+            <p>Erstellt eine Lichtquellendefinition aus der gegebenen Konfiguration.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>config</td><td><a href="#doc_config">Configuration</a></td><td>Das Konfigurationsobjekt, dass die auszulesenden Eigenschaften enth&auml;lt<td></tr>
+              <tr><td>return</td><td><a href="#ref_light_source">LightSource</a></td><td>Die erzeugte Lichtquelle</td></tr>
+            </table>
+          <h3>parseColor(res, col)</h3>
+            <p>Wandelt eine Farbe in hexadezimalschreibweise in einen Vektor mit 4 Floats im Bereich [0,1] um.
+              Die Farbcodierung muss dabei eines der folgende Formate haben:</p>
+            <ul>
+              <li>#rrggbbaa</li>
+              <li>#rrggbb</li>
+              <li>#rgba</li>
+              <li>#rgb</li>
+            </ul>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>res</td><td>vec4</td><td>Der Vektor, in den das Ergebnis gespeichert werden soll</td></tr>
+              <tr><td>col</td><td>String</td><td>Zu parsender String</td></tr>
+              <tr><td>return</td><td>vec4</td><td>Den Vektor res</td></tr>
+            </table>
+          <h3>vec3ToHexColor(v)</h3>
+            <p>Wandelt einen Vektor mit 3 Elementen in eine Farbdefinition der Form #rrggbb um.
+  						Werte im Bereich [0,1] werden jeweils auf [0, ff] abgebildet. Werte gr&ouml;&szlig;er 1
+  						werden zu ff, Werte kleiner 0 werden zu 0.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>v</td><td>vec3</td><td>Der Eingabevektor</td></tr>
+              <tr><td>return</td><td>String</td><td>Eine Farbcodierung im Format #rrggbb</td></tr>
+            </table>
+          <h3>vec4ToHexColor(v)</h3>
+  					<p>Wandelt einen Vektor mit 4 Elementen in eine Farbdefinition der Form #rrggbbaa um.
+  						Werte im Bereich [0,1] werden jeweils auf [0, ff] abgebildet. Werte gr&ouml;&szlig;er 1
+  						werden zu ff, Werte kleiner 0 werden zu 0.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>v</td><td>vec4</td><td>Der Eingabevektor</td></tr>
+  						<tr><td>return</td><td>String</td><td>Eine Farbcodierung im Format #rrggbbaa</td></tr>
+  					</table>
+          <h3>parseVec3(res, vec)</h3>
+            <p>Liest einen String als Vektor mit 3 Elementen ein. Die einzelnen Zahlen
+              m&uuml;ssen dazu mit Komme voneinander getrennt werden.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>res</td><td>vec3</td><td>Der Vektor in den das Ergebnis geschrieben werden soll</td></tr>
+              <tr><td>vec</td><td>String</td><td>Der zu parsende String</td></tr>
+              <tr><td>return</td><td>vec3</td><td>Der Ergebnisvektor res</td></tr>
+            </table>
+          <h3>parseVec4(res, vec)</h3>
+            <p>Liest einen String als Vektor mit 4 Elementen ein. Die einzelnen Zahlen
+              m&uuml;ssen dazu mit Komme voneinander getrennt werden.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>res</td><td>vec4</td><td>Der Vektor in den das Ergebnis geschrieben werden soll</td></tr>
+              <tr><td>vec</td><td>String</td><td>Der zu parsende String</td></tr>
+              <tr><td>return</td><td>vec4</td><td>Der Ergebnisvektor res</td></tr>
+            </table>
+          <h3>parseMat4(res, mat)</h3>
+            <p>Liest einen String als 4x4-Matrix reihenweise ein. Die einzelnen Zahlen
+              m&uuml;ssen dazu mit Komme voneinander getrennt werden.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>res</td><td>mat4</td><td>Die Matrix in die das Ergebnis geschrieben werden soll</td></tr>
+              <tr><td>vec</td><td>String</td><td>Der zu parsende String</td></tr>
+              <tr><td>return</td><td>mat4</td><td>Die Ergebnismatrix res</td></tr>
+            </table>
+        <h2 id="ref_camera">camera</h2>
+          <h3>create()</h3>
+            <p>Erzeugt ein Kamerobjekt mit den Standard-Einstellungen.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_cameraObj">Camera</a></td><td>Das erzeugte Kameraobjekt</td></tr>
+            </table>
+          <h3>createFromConfig(config)</h3>
+            <p>Erzeugt ein Kamerobjekt aus einem Konfigurationsobjekt.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>config</td><td><a href="#doc_config">Configuration</a></td><td>Die Konfiguration die die Werte der Kamera enth&auml;lt</td></tr>
+              <tr><td>return</td><td><a href="#ref_cameraObj">Camera</a></td><td>Das erzeugte Kameraobjekt</td></tr>
+          </table>
+          <h3>movementSpeed(val)</h3>
+  					<p>Legt die Bewegungsgeschwindigkeit der Kamera in Einheiten pro Sekunde fest,
+  						fals val angegeben ist und gibt danach die aktuelle Bewegungsgeschwindigkeit zur&uuml;ck.
+              Der Wert iust f&uuml;r alle Kameraobjekte g&uuml;ltig.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>[val]</td><td>Number</td><td>Die neue Bewegungsgeschwindigkeit</td></tr>
+  						<tr><td>return</td><td>Number</td><td>Die aktuelle Bewegungsgeschwindigkeit</td></tr>
+  					</table>
+					<h3>rotationSpeed(val)</h3>
+  					<p>Legt die Rotationsgeschwindigkeit in Einheiten pro Pixel die die Maus bewegt wurde, fest,
+              falls val angegeben wurde und gibt die aktuelle Rotationsgeschwindigkeit zur&uuml;ck.
+              Der Wert iust f&uuml;r alle Kameraobjekte g&uuml;ltig.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>[val]</td><td>Number</td><td>Die neue Rotationsgeschwindigkeit</td></tr>
+  						<tr><td>return</td><td>Number</td><td>Die aktuelle Rotationsgeschwindigkeit</td></tr>
+  					</table>
+					<h3>keys(l, r, f, b)</h3>
+  					<p>Legt die Tasten f&uuml;r die Kamerabewegung fest, falls alle
+              Parameter angegeben sind und gibt die aktuelle Tastenbelegung zur&uuml;ck.
+              Die Tastenbelegung ist f&uuml;r alle Kameraobjekte g&uuml;ltig</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>[l]</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach links</td></tr>
+              <tr><td>[r]</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach rechts</td></tr>
+              <tr><td>[f]</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach vorne</td></tr>
+              <tr><td>[b]</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach hinten</td></tr>
+  						<tr><td>return</td><td><a href="#ref_keys">Keys</a></td><td>Die aktuelle Tastenbelegung</td></tr>
+  					</table>
+        <h2 id="ref_quadrics">quadrics</h2>
+  				<p>Dies ist der "Namespace" Quadric, nicht zu verwechseln mit <a href="#ref_quadric">Quadric-objekten</a>.
+  					Alle Funktionen der Quadrics, im Format quadric.createXYZ(...) erzeugen
+  					geometrische Figuren die genau in einen W&uuml;rfel mit Kantenl&auml;nge 1 passen.</p>
+          <h3>defaultColor(r, g, b, a)</h3>
+            <p>Legt die Farbe fest, die jeder Vektor neu erzeugter Quadrics haben soll, falls
+  						r, g, b und a angegeben werden.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>[r]</td><td>Number</td><td>Der Rotanteil der Farbe als Zahl zwischen 0 und 1</td></tr>
+  						<tr><td>[g]</td><td>Number</td><td>Der Gr&uuml;nanteil der Farbe als Zahl zwischen 0 und 1</td></tr>
+  						<tr><td>[b]</td><td>Number</td><td>Der Blauanteil der Farbe als Zahl zwischen 0 und 1</td></tr>
+  						<tr><td>[a]</td><td>Number</td><td>Der Alphawert der Farbe als Zahl zwischen 0 und 1</td></tr>
+              <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+            </table>
+          <h3>create()</h3>
+            <p>Erzeugt eine neue, leer Quadric, die manuell mit Vektordaten bef&uuml;llt werden kann.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Die erzeugte Quadric</td></tr>
+            </table>
+          <h3>createSimpleBox()</h3>
+            <p>Erzeugt eine einfache Box mit Kantenl&auml;nge 2</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Eine einfache Box</td></tr>
+            </table>
+          <h3>createBox(slicesX, slicesY, slicesZ)</h3>
+            <p>Erstellt eine Box die aus einer, f&uuml;r jede Dimension gegebenen, Anzahl Scheiben besteht.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>slicesX</td><td>Number</td><td>Die Anzahl der Scheiben in x-Richtung</td></tr>
+  						<tr><td>slicesY</td><td>Number</td><td>Die Anzahl der Scheiben in y-Richtung</td></tr>
+  						<tr><td>slicesZ</td><td>Number</td><td>Die Anzahl der Scheiben in z-Richtung</td></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Eine Box</td></tr>
+            </table>
+          <h3>createUVSphere(slices, stacks)</h3>
+            <p>Erstellt eine Kugel aus verschiedengro&szlig;en Scheiben.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>slices</td><td>Number</td><td>Die Anzahl der St&uuml;cke pro Scheibe</td></tr>
+  						<tr><td>stacks</td><td>Number</td><td>Die Anzahl der gestapelten Scheiben</td></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Eine einfache Kugel.</td></tr>
+            </table>
+          <h3>createIcoSphere(subdiv)</h3>
+            <p>Erzeugt eine Kugel durch Unterteilung eines Ikosaeders.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>subdiv</td><td>Number</td><td>Dei Anzahl der Unterteilungen</td></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Eine regelm&auml;&szlig;ige Kugel.</td></tr>
+            </table>
+          <h3>createCylinder(slices, stacks)</h3>
+            <p>Erzeugt einen Zylinder aus verschiedengro&szlig;en Scheiben.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>stacks</td><td>Number</td><td>Die Anzahl der Scheiben</td></tr>
+  						<tr><td>slices</td><td>Number</td><td>Die Anzahl der St&uuml;cke pro Scheibe.</td></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>-</td></tr>
+            </table>
+          <h3>createDisk(slices, loops)</h3>
+            <p>Erzeugt eine Scheibe aus verschiedengro&szlig;en Kreisen.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>slices</td><td>Number</td><td>Die Anzahl der Segmente pro Kreis.</td></tr>
+  						<tr><td>loops</td><td>Number</td><td>Die Anzahl der Kreis.</td></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Eine Scheibe</td></tr>
+            </table>
+          <h3>createSimpleCone(slices, stacks)</h3>
+            <p>Erzeugt einen einfachen Kegel.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>slices</td><td>Number</td><td>Die Anzahl der St&uuml;cke pro Scheibe</td></tr>
+  						<tr><td>stacks</td><td>Number</td><td>Die Anzahl der Scheiben</td></tr>
+              <tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Einen einfachen Kegel</td></tr>
+            </table>
+          <h3>createCone(maxHeight, slices, stacks)</h3>
+            <p>Erzeugt einen Kegelstump aus einem Kegel mit gegebener H&ouml;he, der
+  						auf einer H&ouml;he von 2 abgeschnitten wurde. Wenn maxHeight gleich
+  						1 ist entspricht das Ergebnis dem Ergebnis von createSimpleCone(...)</p>
+            <table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>maxHeight</td><td>Number</td><td>Die maximale H&ouml;he die der volle Kegel h&auml;tte</td></tr>
+  						<tr><td>slices</td><td>Number</td><td>Die Anzahl der St&uuml;cke pro Scheibe</td></tr>
+  						<tr><td>stacks</td><td>Number</td><td>Die Anzahl der Scheiben</td></tr>
+  						<tr><td>return</td><td><a href="#ref_quadric">Quadric</a></td><td>Einen einfachen Kegel</td></tr>
+            </table>
+				<h2 id="ref_mouse_movement">MouseMovement</h2>
+					<p>Objekt, um die Bewegung der Maus zu beschreiben</p>
+					<table>
+						<tr><th>Eigenschaft</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>dx</td><td>Number</td><td>Die horizontale Mausbewegung in Pixeln seit dem letzten Frame</td></tr>
+						<tr><td>dy</td><td>Number</td><td>Die vertikale Mausbewegung in Pixeln seit dem letzten Frame</td></tr>
+					</table>
+				<h2 id="ref_mouse_pos">MousePos</h2>
+					<p>Objekt, um die Position der Maus zu beschreiben</p>
+					<h3>Eigenschaften</h3>
+					<table>
+						<tr><th>Eigenschaft</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>x</td><td>Number</td><td>Die Entfernung vom linken Rand in Pixeln im letzten Frame</td></tr>
+						<tr><td>y</td><td>Number</td><td>Die Entfernung vom oberen Rand in Pixeln im letzten Frame</td></tr>
+					</table>
+				<h2 id="ref_quadric">Quadric</h2>
+					<p>Repr&auml;sentiert ein geometrisches Objekt durch eine Anzahl an Vertices und Indices.</p>
+					<h3>Eigenschaften</h3>
+					<table>
+						<tr><th>Eigenschaft</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>vertices</td><td>Number[]</td><td>Positionen, je 3 Zahlen (x, y, z) pro Vektor</td></tr>
+						<tr><td>normals</td><td>Number[]</td><td>Normalen, je 3 Zahlen (x, y, z) pro Vektor</td></tr>
+						<tr><td>colors</td><td>Number[]</td><td>Farben, je 4 Zahlen (r, g, b, a) pro Vektor</td></tr>
+						<tr><td>texCoords</td><td>Number[]</td><td>Texturkoordinaten, je 2 Zahlen (s, t) pro Vektor</td></tr>
+						<tr><td>indices</td><td>Number[]</td><td>Indizes, die Reihenfolge in der die Vektoren gezeichnet werden sollen</td></tr>
+						<tr><td>vertexCount</td><td>Number</td><td>Die Anzahl der Vektoren</td></tr>
+					</table>
+					<h3>concat(q)</h3>
+					<p>Verbindet die aktuelle Quadric-Instanz mit q.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>q</td><td><a href="#ref_quadric">Quadric</a></td><td>Die Quadric, die an die aktuelle Instanz angeh&auml;ngt werden soll</td></tr>
+						<tr><td>return</td><td>-</td><td>-</td></tr>
+					</table>
+					<h3>transform(m)</h3>
+					<p>Transformiert alle Vektoren der Quadric mit einer 4x4-Matrix. Siehe die gl-Matrix-Dokumentation
+						zu vec3.transformMat4. Aus der 4x4-Matrix wird eine 3x3-Normalentransformationsmatrix erstellt,
+						mit der die Normalen transformiert werden.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>m</td><td>mat4</td><td>Die Transformationsmatrix</td></tr>
+						<tr><td>return</td><td>-</td><td>-</td></tr>
+					</table>
+				<h2 id="ref_scene_object">SceneObject</h2>
+					<p>Stellt ein Objekt der Szene dar.</p>
+					<h3>id()</h3>
+  					<p>Holt die id des Objekts.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>return</td><td>String</td><td>Die Id</td></tr>
+  					</table>
+					<h3>mode()</h3>
+  					<p>Holt den Modus in dem die Vertizes des Objekts gezeichnet werden.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>return</td><td>Number</td><td>der Zeichenmodus, gl.TRIANGLES oder gl.LINES</td></tr>
+  					</table>
+					<h3>modelMatrix(m)</h3>
+  					<p>Legt eine neue Modelmatrix f&uuml;r das Objekt fest, falls m angegeben
+  						ist und gibt die aktuelle Matrix zur&uuml;ck.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>[m]</td><td>mat4</td><td>Die neue Modelmatrix</td></tr>
+  						<tr><td>return</td><td>mat4</td><td>Die aktuelle Modelmatrix</td></tr>
+  					</table>
+					<h3>material(m)</h3>
+  					<p>Legt ein neues Material f&uuml;r das Objekt fest, falls m definiert ist
+  						und gibt das aktuelle Material zur&uuml;ck.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>[m]</td><td><a href="#ref_material">Material</a></td><td>Das neue Material</td></tr>
+  						<tr><td>return</td><td><a href="#ref_material">Material</a></td><td>Das aktuelle Material</td></tr>
+  					</table>
+					<h3>visible(b)</h3>
+  					<p>Legt fest ob das Objekt sichtbar ist, falls b angegeben ist
+  						und gibt die Sichtbarkeit des Objekts zur&uuml;ck.</p>
+  					<table>
+  						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  						<tr><td>[b]</td><td>Boolean</td><td>True, wenn das Objekt sichtbar sein soll, sonst false</td></tr>
+  						<tr><td>return</td><td>Boolean</td><td>True, wenn das Objekt gerade sichtbar ist, sonst false</td></tr>
+  					</table>
+          <h3>description()</h3>
+            <p>Holt die Beschreibung des Objekts als String.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td>String</td><td>Die Beschreibung</td></tr>
+            </table>
+          <h3>bind()</h3>
+            <p>Bindet das Objekt und bereitet es zum Rendern vor.</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td>-</td><td>-</td></tr>
+            </table>
+          <h3>render()</h3>
+            <p>Rendert das Objekt</p>
+            <table>
+              <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+              <tr><td>return</td><td>-</td><td>-</td></tr>
+            </table>
+				<h2 id="ref_cameraObj">Camera</h2>
+					<h3>update(delta)</h3>
+					<p>Aktualisiert die Kameraposition und Blickrichtung.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>delta</td><td>Number</td><td>Millisekunden, die seit dem letzten Frame vergangen sind</td></tr>
+						<tr><td>return</td><td>-</td><td>-</td></tr>
+					</table>
+					<h3>position(v)</h3>
+					<p>Legt die Kameraposition fest, falls v angegeben ist und gibt die
+            aktuelle Kamerposition zur&uuml;ck.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>[v]</td><td>vec3</td><td>Die neue Position der Kamera</td></tr>
+						<tr><td>return</td><td>vec3</td><td>Die aktuelle Position der Kamera</td></tr>
+					</table>
+					<h3>polar(val)</h3>
+					<p>Legt den Polarwinkel fest, falls val angegeben ist und
+            gibt den aktuellen Azimutwinkel zur&uuml;ck.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>[val]</td><td>Number</td><td>Der neue Polarwinkel</td></tr>
+						<tr><td>return</td><td>Number</td><td>Der aktuelle Polarwinkel</td></tr>
+					</table>
+          <h3>azimut(val)</h3>
+          <p>Legt den Azimuwinkel fest, falls val angegeben ist und
+            gibt den aktuellen Azimutwinkel zur&uuml;ck.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>[val]</td><td>Number</td><td>Der neue Azimutwinkel</td></tr>
+						<tr><td>return</td><td>Number</td><td>Der aktuelle Azimutwinkel</td></tr>
+					</table>
+					<h3>moveBy(v)</h3>
+          <p>Bewegt die Kamera um den angegeben Vektor.</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>v</td><td>vec3</td><td>Der Vektor, um den die Kamera bewegt werden soll</td></tr>
+						<tr><td>return</td><td>-</td><td>-</td></tr>
+					</table>
+					<h3>rotateBy(p, a)</h3>
+					<p>Rotiert die Kamera um die angegebenen Polar- und Azimutwinkel</p>
+					<table>
+						<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+						<tr><td>p</td><td>Number</td><td>Der Polarwinkel</td></tr>
+            <tr><td>a</td><td>Number</td><td>Der Azimutwinkel</td></tr>
+						<tr><td>return</td><td>-</td><td>-</td></tr>
+					</table>
+          <h3>cameraMatrix(out)</h3>
+          <p>Berechnet aus Position, Azimut- und Polarwinkel die Kamermatrix.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>out</td><td>mat4</td><td>Die 4x4-Matrix, in die das Ergebnis geschrieben werden soll</td></tr>
+            <tr><td>return</td><td>mat</td><td>Gibt out zur&uuml;ck</td></tr>
+          </table>
+          <h3>getConfig(parent)</h3>
+          <p>Schreibt die <a href="#doc_config">Konfiguration</a> in das &uuml;bergebene Objekt.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>parent</td><td>Object</td><td>Das Objekt, dass die Eigenschaften der Kamera speichertn soll.</td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+				<h2 id="ref_light_source">LightSource</h2>
+          <p>Objekt, dass eine Lichtquelle repr&auml;sentiert.</p>
+          <h3>position(pos)</h3>
+  				<p>Legt die Position der Lichtquelle fest, falls pos angegben ist und
+            gibt die aktuelle Lichtquelle zur&uuml;ck.</p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  					<tr><td>[pos]</td><td>vec4</td><td>Die neue Position</td></tr>
+  					<tr><td>return</td><td>vec4</td><td>Die aktuelle Position</td></tr>
+  				</table>
+          <h3>ambient(val)</h3>
+  				<p>Legt die Farbe des Ambientlichtes fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  					<tr><td>[val]</td><td>vec4</td><td>Die neue Farbe</td></tr>
+  					<tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+  				</table>
+          <h3>diffuse(val)</h3>
+  				<p>Legt die Farbe des diffusen Lichtes fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>[val]</td><td>vec4</td><td>Die neue Farbe</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+  				</table>
+          <h3>specular(val)</h3>
+  				<p>Legt die Farbe des Spekularen Lichtes fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>[val]</td><td>vec4</td><td>Die neue Farbe</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+  				</table>
+          <h3>attenuation(c, l, q)</h3>
+  				<p>Legt die Abschw&auml;chung des Lichtes fest, falls alle Parameter
+            definiert sind und gibt den aktuellen Wert als Vektor zur&uuml;ck.</p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>[c]</td><td>Number</td><td>Die neue konstante Abschw&auml;chung</td></tr>
+            <tr><td>[l]</td><td>Number</td><td>Die neue linear Abschw&auml;chung</td></tr>
+            <tr><td>[q]</td><td>Number</td><td>Die neue quadratische Abschw&auml;chung</td></tr>
+            <tr><td>return</td><td>vec3</td><td>Die aktuelle Abschw&auml;chung</td></tr>
+  				</table>
+          <h3>getConfig(parent)</h3>
+          <p>Schreibt die <a href="#doc_config">Konfiguration</a> in das &uuml;bergebene Objekt.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>parent</td><td>Object</td><td>Das Objekt, dass die Eigenschaften der Kamera speichertn soll.</td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+				<h2 id="ref_program">Program</h2>
+          <p>Objekt, dass ein glsl-Programm abstrahiert.</p>
+          <h3>id()</h3>
+          <p>Gibt die Id des Progams zur&uuml;ck</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>WebGlProgram</td><td>Das zugrundeliegende WebGl-Programm</td></tr>
+          </table>
+          <h3>bufferModelViewMatrix(m)</h3>
+  				<p>Schreibt eine 4x4-Matrix in das Uniform f&uuml;r die Modelviewmatrix,
+            falls dieses definiert wurde. Falls ein Uniform f&uuml;r die
+            Normalentransformationsmatrix existiert, wird diese Matrix berechnet und ebenfalls gepuffert.</p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  					<tr><td>m</td><td>mat4</td><td>Die zu schreibende Modelviewmatrix</td></tr>
+  					<tr><td>return</td><td>-</td><td>-</td></tr>
+  				</table>
+          <h3>bufferProjectionMatrix(m)</h3>
+          <p>Schreibt eine 4x4-Matrix in das Uniform f&uuml;r die Projektionsmatrix,
+            falls dieses existiert.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>m</td><td>mat4</td><td>Die zu schreibende Matrix</td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+          <h3>bufferMaterial(material)</h3>
+          <p>Schreibt Materialwerte in die jeweiligen Uniforms, sofern diese definiert sind.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>material</td><td><a href="#ref_material">Material</a></td><td>Das zu schreibende Material</td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+          <h3>bufferLightSource(light)</h3>
+          <p>Schreibt Lichtwerte in die jeweiligen Uniforms, sofern diese definiert sind.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>light</td><td><a href="#ref_light_source">LightSource</a></td><td></td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+          <h3>bindAttribPointers()</h3>
+          <p>Bindet die Attribpointer, die mit dem Programm asoziiert sind.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+          <h3>releaseAttribPointers()</h3>
+          <p>Hebt die Bindung der Attribpointer, die mit diesem Programm asoziiert sind auf.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+        <h2 id="ref_plugin">Plugin</h2>
+          <p>Objekt, dass ein Plugin darstellt und durch dass Einstellungen
+            f&uuml;r ein Plugin vorgenommen werden k&ouml;nnen.</p>
+          <h3>on(what, f)</h3>
+          <p>Legt einen Eventhandler f&uuml;r ein Event fest. Das hei&szlig;t, dass
+            die Funktion f immer  dann ausgef&uuml;hrt wird, wenn das Ereigniss,
+            dass durch what beschrieben wird eintritt.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>what</td><td>String</td><td>Der Eventbezeichner. Siehe dazu <a href="#ref_events">Events</a></td></tr>
+            <tr><td>f</td><td>Function</td><td>Die auszuf&uuml;hrende Funktion</td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+          <h3>visible(val)</h3>
+          <p>Legt die Sichtbarkeit des Plugins fest, falls val angegeben ist und
+            gibt die aktuelle Sichtbarkeit zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>[val]</td><td>Boolean</td><td>True, wenn das Plugin sichtbar sein soll, sonst false</td></tr>
+            <tr><td>return</td><td>-</td><td>True, wenn das Plugin sichtbar ist, sonst false</td></tr>
+          </table>
+          <h3 id="ref_plugin_html">html(html)</h3>
+          <p>Legt den Html-inhalt der Einstellungen zu diesem Plugin fest.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>html</td><td>String</td><td>Der html-Inhalt der Einstellungen</td></tr>
+            <tr><td>return</td><td>JQueryObject</td><td>Das JQueryObjekt, das auf
+              den au&szlig;eren div-Block im DOM der Einstellungen des Plugins verweis&szlig;t</td></tr>
+          </table>
+          <h3>id()</h3>
+          <p>Holt die Id des Plugins.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>String</td><td>Die Id</td></tr>
+          </table>
+          <h3>name()</h3>
+          <p>Holt den Namen des Plugins</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>String</td><td>Der Name</td></tr>
+          </table>
+          <h3>area(x0, y0, x1, y1)</h3>
+          <p>Legt den Bildschirmbereich fest, auf dem das Plugin angezeigt wird.
+            Der Wert wird in jedem Frame von der Engine neu gesetzt.
+            Gibt danach ein Area-Objekt zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>[x0]</td><td>Number</td><td>Der x-Wert der oberen, linken Ecke in Pixeln</td></tr>
+            <tr><td>[y0]</td><td>Number</td><td>Der y-Wert der oberen, linken Ecke in Pixeln</td></tr>
+            <tr><td>[x1]</td><td>Number</td><td>Der x-Wert der unteren, rechten Ecke in Pixeln</td></tr>
+            <tr><td>[y1]</td><td>Number</td><td>Der y-Wert der unteren, rechten Ecke in Pixeln</td></tr>
+            <tr><td>return</td><td><a href="#ref_area">Area</a></td><td>Den aktuellen Bereich</td></tr>
+          </table>
+          <h3>isInArea(x, y)</h3>
+          <p>GibPr&uuml;ft, ob der bezeichnete Punkt innerhalb des Anzeigebereichs
+            des Plugins liegt, oder nicht.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>x</td><td>Number</td><td>Die x-Koordinate des Punktes</td></tr>
+            <tr><td>y</td><td>Number</td><td>Die y-Koordinate des Punktes</td></tr>
+            <tr><td>return</td><td>Boolean</td><td>true, wenn der Punkt innerhalb des
+              Bereichs des Plugins liegt, sonst false.</td></tr>
+          </table>
+          <h3>viewWidth()</h3>
+          <p>Holt die Breite des Viewports des Plugins in Pixeln.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>Number</td><td>Die Breite des Viewports</td></tr>
+          </table>
+          <h3>viewHeight()</h3>
+          <p>Holt die H&ouml;he des Viewports in Pixeln.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>return</td><td>Number</td><td>Die H&ouml;he des Viewports</td></tr>
+          </table>
+        <h2 id="ref_keys">Keys</h2>
+          <p>Stellt eine Tastenbelegung dar.</p>
+          <h4>Eigenschaften</h4>
+          <table>
+            <tr><th>Eigenschaft</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>left</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach links</td></tr>
+            <tr><td>right</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach rechts</td></tr>
+            <tr><td>front</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach vorne</td></tr>
+            <tr><td>back</td><td>String</td><td>Die Taste f&uuml;r die Bewegung nach hinten</td></tr>
+          </table>
+        <h2 id="ref_material">Material</h2>
+          <p>Objekt, dass eine Lichtquelle repr&auml;sentiert.</p>
+          <h3>position(pos)</h3>
+          <p>Legt die Position der Lichtquelle fest, falls pos angegben ist und
+            gibt die aktuelle Lichtquelle zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>pos</td><td>vec4</td><td>Die neue Position</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Position</td></tr>
+          </table>
+          <h3>emission(val)</h3>
+          <p>Legt die Farbe der Emission fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>val</td><td>vec4</td><td>Die neue Farbe</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+          </table>
+          <h3>ambient(val)</h3>
+          <p>Legt die Farbe des Ambientlichtes fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>val</td><td>vec4</td><td>Die neue Farbe</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+          </table>
+          <h3>diffuse(val)</h3>
+          <p>Legt die Farbe des diffusen Lichtes fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>val</td><td>vec4</td><td>Die neue Farbe</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+          </table>
+          <h3>specular(val)</h3>
+          <p>Legt die Farbe des Spekularen Lichtes fest, falls val definiert ist und
+            gibt den aktuellen Wert zur&uuml;ck.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>val</td><td>vec4</td><td>Die neue Farbe</td></tr>
+            <tr><td>return</td><td>vec4</td><td>Die aktuelle Farbe</td></tr>
+          </table>
+          <h3>shininess(val)</h3>
+  				<p></p>
+  				<table>
+  					<tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+  					<tr><td>val</td><td>Number</td><td>Der neue Glanzwert</td></tr>
+  					<tr><td>return</td><td>Number</td><td>Der alte Glanzwert</td></tr>
+  				</table>
+          <h3>getConfig(parent)</h3>
+          <p>Schreibt die <a href="#doc_config">Konfiguration</a> in das &uuml;bergebene Objekt.</p>
+          <table>
+            <tr><th>Parameter</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>parent</td><td>Object</td><td>Das Objekt, dass die Eigenschaften der Kamera speichertn soll.</td></tr>
+            <tr><td>return</td><td>-</td><td>-</td></tr>
+          </table>
+        <h2 id="ref_area">Area</h2>
+          <p>Objekt zur Darstellung eines Bereichs auf einer 2-dimensionalen Oberfl&auml;che<p>
+          <h3>Eigenschaften</h3>
+          <table>
+            <tr><th>Eigenschaft</th><th>Typ</th><th>Beschreibung</th></tr>
+            <tr><td>[x0]</td><td>Number</td><td>Der x-Wert der oberen, linken Ecke in Pixeln</td></tr>
+            <tr><td>[y0]</td><td>Number</td><td>Der y-Wert der oberen, linken Ecke in Pixeln</td></tr>
+            <tr><td>[x1]</td><td>Number</td><td>Der x-Wert der unteren, rechten Ecke in Pixeln</td></tr>
+            <tr><td>[y1]</td><td>Number</td><td>Der y-Wert der unteren, rechten Ecke in Pixeln</td></tr>
+          </table>
+        <h2 id="ref_events">Events</h2>
+          <p>Es k&ouml;nnen folgende Events auftreten:</p>
+          <table>
+            <tr><th>Event</th><th>Beschreibung</th></tr>
+            <tr><td>destroy</td><td>Wird aufgerufen, wenn das Plugin vom Nutzer entfernt wurde. Hier sollten Ressourcen
+              freigegeben werden, die nicht automatisch freigegeben werden k&ouml;nnen.</td></tr>
+            <tr><td>show</td><td>Wird aufgerufen, wenn das Plugin eingeblendet wird.</td></tr>
+            <tr><td>hide</td><td>Wird aufgerufen, wenn das Plugin ausgeblendet wird.</td></tr>
+            <tr><td>bind</td><td>Wird aufgerufen, wenn die Renderschleife f&uuml;r das Plugin begonnen wird.</td></tr>
+            <tr><td>callback</td><td>Wird aufgerufen, bevor das Plugin gerendert wird.</td></tr>
+            <tr><td>release</td><td>Wird aufgerufen, wenn die Renderschleife f&uuml;r das Plugin beendet wurde.</td></tr>
+            <tr><td>config_requested</td><td>Wird aufgerufen, wenn eine <a href="#doc_config">Konfiguration</a> erstellt werden soll.
+              Die Funktion, die das Event behandelt sollte ein Konfigurationsobjekt zur&uuml;ckgeben.</td></tr>
+            <tr><td>config_loaded</td><td>Wird aufgerufen, wenn eine <a href="#doc_config">Konfiguration</a> geladen werden soll.
+              Die Funktion, die das Event behandelt sollte einen Parameter annhemen. Dieser enth&auml;lt das geladene Konfigurationsobjekt</td></tr>
+          </table>
+          <p>Es ist m&ouml;glich, dass Aufrufe von Events einen Parameter enthalten oder einen R&uuml;ckgabewert fordern.</p>
+		<h1 id="about">&Uuml;ber</h1>
+      <p>"WebGL-basiertes Framework für interaktive Lehr- und Übungsbeispiele aus der Computergraphik" -
+        Entwickelt von Lukas Tietze im Rahmen eines Forschungspraktikums bei der Professur
+        "Graphische Datenverarbeitung und Visualisierung", betreut durch Dr. Marcel Heinz.</p>
+  </body>
+</html>

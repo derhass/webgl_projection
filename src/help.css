@@ -1,0 +1,48 @@
+body {
+  padding-left: 25%;
+  padding-right: 25%;
+}
+
+table {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+  width: 100%;
+  border-spacing: 0;
+}
+
+th {
+  text-align: left;
+  padding: 5px;
+}
+
+td {
+  vertical-align: super;
+  padding: 5px;
+}
+
+td:first-child {
+  width: 20%;
+}
+
+tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+tr:nth-child(odd) {
+  background-color: #e0e0e0;
+}
+
+#up_button {
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: #aaaaaa;
+  padding: 5px;
+}
+
+.img_div {
+    width: 100%;
+    text-align: center;
+}

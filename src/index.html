@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html" charset=utf-8 />
+  	<!--externe Skripte TODO: jquery später über Link einbinden
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    lokale Skripte-->
+    <script src="scripts/jquery-3.2.0.min.js"></script>
+    <script src="scripts/gl-matrix.js"></script>
+    <script src="scripts/util.js"></script>
+    <script src="scripts/engine.js"></script>
+    <!-- Standardplugins -->
+    <script src="plugins/perspective.js"></script>
+    <script src="plugins/scene.js"></script>
+    <!-- <script src="plugins/dummy0.js"></script> -->
+    <!-- <script src="plugins/dummy1.js"></script> -->
+  	<!--StyleSheets-->
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="menu">
+      <h3>Plugins</h3>
+      <div id="menu_bottom">
+        <div id="camera_speed_slider_div">
+          <span>Camera speed</span>
+          <input type="range" min="1" max="100" value="35"/>
+          <span id="camera_speed_text"/>
+        </div>
+        <a href="#" id="create_config_link">Create Configuration-Link</a>
+      </div>
+    </div>
+    <div id="canvas_div">
+      <canvas id="glcanvas"></canvas>
+      <canvas id="overlay"></canvas>
+    </div>
+    <div id="interaction_div">
+      <button id="toogle_side_menu_button"></button>
+      <button id="load_plugin_button">Load Plugin</button>
+      <div id="status_div"><span id="status_text"></span></div>
+      <button id="show_help_button">?</button>
+    </div>
+    <form>
+      <input type="file" id="file_picker" multiple accept=".js"/>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,199 @@
+#canvas_div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 40px;
+  background: #00FF00;
+}
+
+* {
+    user-select: none;
+}
+
+#glcanvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+#overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+}
+
+#interaction_div {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  color: #d0d0d0;
+  background-color: #323232;
+  padding: 2px;
+}
+
+#load_plugin_button {
+  position: relative;
+  float: left;
+  height: 32px;
+  margin: 2px;
+  width: auto;
+}
+
+#status_div {
+  position: relative;
+  float: left;
+  width: auto;
+  height: 32px;
+  line-height: 32px;
+  margin: 2px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+button {
+  border: none;
+  background-color: #505050;
+  color: #d0d0d0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+button:disabled {
+  background-color: #707070;
+  color: #909090;
+}
+
+#status_text {
+  vertical-align: middle;
+  line-height: normal;
+  display: inline-block;
+}
+
+#show_help_button, #toogle_side_menu_button {
+  position: relative;
+  float: right;
+  width: 32px;
+  height: 32px;
+  margin: 2px;
+}
+
+#toogle_side_menu_button {
+  background-image: url(../res/side_menu.png);
+  background-size: 65%;
+  float: left;
+}
+
+#file_picker {
+  display: none;
+}
+
+#menu {
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 40px;
+  top: 0;
+  background-color: #323232;
+  color: #A0A0A0;
+  z-index: 40;
+  transition: right 0.5s;
+  overflow: hidden;
+}
+
+#menu > div {
+  margin: 5px;
+}
+
+a:visited {
+  color: #80A080;
+}
+
+a:hover {
+  color: #80A080;
+  text-decoration: underline;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + div + div {
+  display: none;
+  background-color: #323232;
+}
+
+input[type="radio"]:checked + div + div {
+  display: inline-block;
+  background-color: #505050;
+}
+
+input[type="radio"]:checked + div {
+  background-color: #505050;
+}
+
+.item_header {
+  width: 100%;
+}
+
+.item_header:hover {
+  background-color: #444444;
+}
+
+.item_label {
+  display: inline-block;
+  width: 100%;
+}
+
+.item_close_button, .item_hide_button {
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-color: rgba(0, 0, 0, 0);
+  width: 21px;
+  height: 21px;
+}
+
+.item_close_button {
+  right: 0;
+}
+
+.item_hide_button {
+  background-image: url(../res/eye_open.png);
+  right: 23px;
+}
+
+.item_body {
+  width: 100%;
+  padding-left: 20px;
+}
+
+input[type="text"] {
+  font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
+
+#menu_bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#camera_speed_slider_div {
+  width: 100%;
+}
+
+#camera_speed_slider_div input {
+  width: 30%;
+}
+
+#camera_speed_slider_div span {
+  width: 20%;
+  height: 21px;
+}
