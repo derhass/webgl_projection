@@ -713,7 +713,7 @@ engine.onReady(function() {
           </tr><tr>\
             <td>Farplane</td><td><input type="text" id="far_text"/></td>\
           </tr><tr>\
-            <td>Aspect Ratio</td><td><input type="text" id="aspect_ratio_text" value="1.0" /></td>\
+            <td>Aspect Adjust</td><td><input type="text" id="aspect_ratio_text" value="1.0" /></td>\
           </tr></table>\
         <hr/><label>Set custom projection matrix</label>\
           <table id="manual_frustum">\
